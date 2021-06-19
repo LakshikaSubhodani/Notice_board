@@ -18,6 +18,15 @@ class Login extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+	public function __construct()
+	{
+			parent::__construct();
+			// Your own constructor code
+			$this->load->model('User_login_model');
+	}
+
+
+
 	public function index()
 	{
 		$this->template->view_userlogin('login_page');
@@ -26,11 +35,12 @@ class Login extends CI_Controller {
 	
 	public function register()
 	{
+
 		$this->template->view_user_registration('register_page');
 	}
 
 
-	function login_validation()
+	public function login_validation()
 	{
 		$this->form_validation->set_rules('enroll','Enroll','required');
 		$this->form_validation->set_rules('password','Password','required');
@@ -39,7 +49,7 @@ class Login extends CI_Controller {
 			$username = $this->input->post('enroll');
 			$password = $this->input->post('password');
 
-			$this->load->model('User_login_model');
+			
 			$check = $this->User_login_model->can_login($username,$password);
 			if ($check->num_rows() == TRUE) {
 
@@ -78,9 +88,41 @@ class Login extends CI_Controller {
 
 		}else{
 			$this->index();
-		}
-
-
+		}	
 		
+	}
+
+	public function register_validation(){
+
+		// cheack enroll id exsist
+		$enrollid  = $this->User_login_model->check_enroll_exsit($this->input->post("enroll"));
+
+		if($enrollid == false){
+
+			$data = array(
+				"enrollment_Id" => $this->input->post("enroll"),
+				"user_firstname" => $this->input->post("fname"),
+				"user_lastname" => $this->input->post("lname"),
+				"user_contact" => $this->input->post("contact"),
+				"user_email" => $this->input->post("email"),
+				"user_dob" => $this->input->post("dob"),
+				"user_password" => $this->input->post("password"),
+				"user_status" => 'active',
+				"faculty_Id" => $this->input->post("faculty_id")
+			);
+
+			$insert_id = $this->User_login_model->insert_data($data);
+			echo '{"insert_id":'.$insert_id.'}';
+
+		}else{
+			header("HTTP/1.1 400 Not Found");
+			echo '{"enroll_id":"false"}';
+		}
+	}
+
+
+
+	public function inserted(){
+		$this->register();
 	}
 }

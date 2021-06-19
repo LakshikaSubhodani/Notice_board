@@ -5,6 +5,7 @@
 		
 		<h1>Login</h1>
 		<?php echo $this->session->flashdata("error"); ?>
+
 		<form action="<?php echo site_url('login/login_validation')?>" method="POST">
 				<div class="login_txt_field">
 					<input type="text" name="enroll" required>
