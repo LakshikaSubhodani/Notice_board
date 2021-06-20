@@ -23,7 +23,7 @@ body{
     border-radius:10px;
 }
 .container .regform h1{
-    font-weight: 700;
+    /*font-weight: 700;*/
     position: relative;
     margin-bottom: 20px;
     text-align: center;
@@ -122,16 +122,19 @@ body{
 
 .reg_info .submit{
     height: 45px;
-    
     width: 100%;
     outline: none;
     color: #fff;
     border: none;
     font-size: 18px;
-    font-weight: 500;
-    border-radius: 1px;
+    font-weight: 600;
+    border-radius: 10px;
     letter-spacing: 1px;
     background: linear-gradient(120deg,#e92077,#1b76dd);
    
+}
+
+.reg_info .submit:hover{
+    background: linear-gradient(-120deg,#e92077,#1b76dd);
 }
 
