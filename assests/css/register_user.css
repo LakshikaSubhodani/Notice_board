@@ -1,6 +1,11 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;}
+
 body{
 
-    background-color: blueviolet;
+    background: linear-gradient(120deg,#eeaeca,#94bbe9);
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
@@ -16,6 +21,14 @@ body{
     width:60%;
     background:white;
     border-radius:10px;
+}
+.container .regform h1{
+    font-weight: 700;
+    position: relative;
+    margin-bottom: 20px;
+    text-align: center;
+    padding:0 0 30px 0;
+    border-bottom:2px solid silver;
 }
 .reg_info{  
    margin-bottom: 5px; 
@@ -77,3 +90,48 @@ body{
     visibility: visible;
 }
  
+.select{
+    position: relative;
+    left: .5px;
+    top: 5px;
+    width:100%;
+    padding-left: 15px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding-left: 15px;
+    font-weight: 300;
+    border-bottom-width: 2.5px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    outline: none;
+    overflow: hidden;
+    height: 45px;
+    color: #333333;
+}
+
+
+.select:focus,
+.select:hover{
+    outline: none;
+    border:1px solid #bbbbbb;
+}
+
+.select option{
+        background: #ffffff;
+}
+
+.reg_info .submit{
+    height: 45px;
+    
+    width: 100%;
+    outline: none;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 1px;
+    letter-spacing: 1px;
+    background: linear-gradient(120deg,#e92077,#1b76dd);
+   
+}
+

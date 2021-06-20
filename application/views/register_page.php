@@ -2,7 +2,7 @@
     <body>
         <div class="container">
             <div class="regform">
-                <div><h1>Rgistration Form</h1></div>
+                <div><h1>Registration Form</h1></div>
 
                 <?php echo validation_errors(); ?>
                 <?php 
@@ -45,8 +45,8 @@
                     </div>
                     <div id="reg_faculty" class="reg_info">
                         <label for="faculty" class="reg_label">Faculty :</label>
-                        <select name="faculty_id" id="f_aculty" quid>
-                            <option value="5" >Faculty of Animal Science and Export Agricultu</option>
+                        <select name="faculty_id" id="f_aculty" class="select" quid>
+                            <option value="5" >Faculty of Animal Science and Export Agriculture</option>
                             <option value="3" >Faculty of Applied Sciences</option>
                             <option value="4" >Faculty of Management</option>
                             <option value="6" >Faculty of Technological Studies</option>
@@ -93,7 +93,7 @@
             
 
                     <div id="reg_submit" class="reg_info"> 
-                    <button type="submit"  >Submit </button>          
+                    <button type="submit" class="submit">Submit </button>          
                     </div>
 
                 
