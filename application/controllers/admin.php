@@ -181,4 +181,73 @@ class Admin extends CI_Controller {
 		echo json_encode($data);
 	}
 	
+	//newnotice setdata to database;
+	public function set_newnotice(){
+		$this->form_validation->set_rules('title','Title','required');
+		$this->form_validation->set_rules('description','Description','required');
+		$this->form_validation->set_rules('type','Type','required');
+		$this->form_validation->set_rules('expiredate','Expiredate','required');
+
+		if($this->form_validation->run()){
+
+			//if imagefile upload
+			$ori_filename = $_FILES['files']['name'];
+			$newname = time()."".str_replace($ori_filename);
+			$config = [
+				'upload_path' => './assests/uploads/',
+				'allowed_types' => 'gif|jpg|png',
+				'file_name' => $newname,
+			];
+
+				$this->load->library('upload', $config);
+
+						if ( ! $this->upload->do_upload('files'))
+						{
+								$imageError = array('error' => $this->upload->display_errors());
+
+								$this->load->view('upload_form');
+								$this->template->layout_admin('admin/new_notice',$data, $imageError);
+
+						}
+						else
+						{
+								$image_filename = $this->upload->data('file_name');
+
+								$data = [
+									'title' => $this->input->post('title'),
+									'notice_type' => $this->input->post('type'),
+									'discription' => $this->input->post('description'),
+									'create_date' => date("Y-m-d",time()),
+									'update_date' => date("Y-m-d",time()),
+									'expire_date' => $this->input->post('expiredate'),
+									'notice_status' => 'Active'
+								];
+
+								$att =[
+									'attachment' =>$image_filename,
+								];
+
+								//sending log user data to author table
+								// $log_user = $this->session->userdata('log_user');
+								// $role_id = $log_user->faculty_Id;
+
+								// //get notice Id
+								// $notice_Id = $this->AdminModel->getnoticeId($data);
+								// $author =[
+								// 	'faculty_Id' => $role_id,
+								// ];
+
+								$notice = new AdminModel;
+								$res = $notice->insertnotice($data);
+								$result = $notice->insertattachment($att);
+								$this->session->set_flashdata('status','notice insert successfully');
+								redirect('admin/newnotice');
+						}
+		}else{
+			$this->newnotice();
+		}
+		
+	
+
+	}
 }

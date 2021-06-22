@@ -49,12 +49,30 @@ class AdminModel extends CI_Model{
 
         ## Fetch records
         $this->db->select('*');
+        $log_user = $this->session->userdata('log_user');
+        $role_id = $log_user->faculty_Id;
+
+        //select query for database;
+        if($role_id == 1){
+            $this->db->where('faculty_Id = 1 AND notice_Status = "Active"');
+        }else if($role_id == 2 ){
+            $this->db->where('faculty_Id = 2 AND notice_Status = "Active"');
+        }else if($role_id == 3){
+            $this->db->where('faculty_Id = 3 AND notice_Status = "Active"');
+        }else if($role_id == 4){
+            $this->db->where('faculty_Id = 4 AND notice_Status = "Active"');
+        }else if($role_id == 5){
+            $this->db->where('faculty_Id = 5 AND notice_Status = "Active"');
+        }else{
+            $this->db->where('faculty_Id = 6 AND notice_Status = "Active"');
+        }
+        
+        
         if($searchQuery != '')
             $this->db->where($searchQuery);
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
         $records = $this->db->get('no_notice_all_view')->result();
-
         $data = array();
 
         foreach($records as $record ){
@@ -87,6 +105,19 @@ class AdminModel extends CI_Model{
     }
 
 
+    //newnotice for database
+    public function insertnotice($data)
+    {
+    return $this->db->insert('no_notice',$data);
+    }
+    
+    //inserting attachment
+    public function insertattachment($att)
+    {
+        return $this->db->insert('no_attachment',$att);
+    }
+
+    //inserting author
 }
 
 ?>

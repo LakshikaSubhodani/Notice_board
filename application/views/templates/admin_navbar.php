@@ -20,6 +20,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="#"><i class="fa fa-fw fa-user"></i> Edit Profile</a></li>
                     <li><a href="#"><i class="fa fa-fw fa-cog"></i> Change Password</a></li>
+                    <li><a href="#"><i class="fa fa-fw fa-cog"></i> Register</a></li>
                     <li class="divider"></li>
                     <li><a href="<?php echo base_url('admin/logout')?>"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
                 </ul>

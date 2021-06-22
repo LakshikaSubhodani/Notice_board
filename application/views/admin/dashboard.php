@@ -6,7 +6,7 @@
             <!-- Page Heading -->
             <div class="row" id="main" >
                 <div class="col-sm-12 col-md-12 well" id="content">
-                    <h1>Welcome super Admin!</h1>
+                    <h1>Welcome</h1>
                 </div>
             </div>
             <!-- /.row -->
