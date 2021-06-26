@@ -1,13 +1,11 @@
-
-    <body>
-        <div class="container">
+<div class="container">
             <div class="regform">
                 <div><h1>Registration Form</h1></div>
 
                 <?php echo validation_errors(); ?>
                 <?php 
                 $attributes = array('id' => 'contact_form');
-                echo form_open('student/register_validation',$attributes); 
+                echo form_open('admin/register_validation',$attributes); 
                 ?>
                 
                     <div id="reg_entno" class="reg_info ">
@@ -100,9 +98,3 @@
                </form>   
 
             </div>
-        </div> 
- 
-        
-  
-
-

@@ -26,9 +26,10 @@
 
 									<div id="scn_doc">	
 										<label id="scn_doc1" class="scn_label">Uplod files</label><br><br>
-										<input type="file" id="doc_file" name="files"><br><br>
+										<input type="file" id="files" name="files" ><br><br>
 										<small><?php if(isset($error)){echo $error;} ?></small>
 									</div>
+									
 
 									<div id="reg_dob" class="reg_info">
 											<label for="dob" class="reg_label">expire date</label>

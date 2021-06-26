@@ -15,6 +15,24 @@ class AdminModel extends CI_Model{
 
     }
 
+    //insert data into admin
+    public function insert_data($data)
+    {
+        return ($this->db->insert('no_user', $data))  ?   $this->db->insert_id()  :   false;
+
+    }
+
+    public function check_enroll_exsit($enrollId)
+    {
+        $query = $this->db->query("SELECT * FROM no_user WHERE enrollment_Id = '".$enrollId."'");
+        $row = $query->row();
+        
+        if(isset($row)){
+            return true;
+        }
+        return false;
+    }
+
     // get notices for data table
     function getDataNotices($postData=null){
 
@@ -106,17 +124,38 @@ class AdminModel extends CI_Model{
 
 
     //newnotice for database
-    public function insertnotice($data)
+    public function insertnotice($att)
     {
-    return $this->db->insert('no_notice',$data);
+        $this->db->trans_start();
+            $this->db->insert('no_attachment',$att);
+            $attachment_Id = $this->db->insert_id();
+            $data = [
+                'title' => $this->input->post('title'),
+                'notice_type' => $this->input->post('type'),
+                'discription' => $this->input->post('description'),
+                'create_date' => date("Y-m-d",time()),
+                'update_date' => date("Y-m-d",time()),
+                'expire_date' => $this->input->post('expiredate'),
+                'notice_status' => 'Active',
+                'attachment_Id' => $attachment_Id
+            ];
+            //inserting data into notice
+            $this->db->insert('no_notice',$data);
+            $notice_Id = $this->db->insert_id();
+
+            //inserting data into notice_author
+            $log_user = $this->session->userdata('log_user');
+			$role_id = $log_user->admin_Id;
+
+            $author =[
+                'admin_Id' => $role_id,
+                'notice_Id'=> $notice_Id
+            ];
+            
+           $this->db->insert('no_notice_author',$author);
+            $this->db->trans_complete();
     }
     
-    //inserting attachment
-    public function insertattachment($att)
-    {
-        return $this->db->insert('no_attachment',$att);
-    }
-
     //inserting author
 }
 

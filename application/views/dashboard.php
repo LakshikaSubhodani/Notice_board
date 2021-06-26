@@ -12,6 +12,7 @@
       <div class="panel-body">
           <p> <?php echo $notice->discription; ?></p>
       </div>
+      <div ><i class="bi bi-bell-fill"></i></div>
   
     </div>
 

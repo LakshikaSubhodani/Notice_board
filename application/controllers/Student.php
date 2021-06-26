@@ -110,6 +110,7 @@ class Student extends CI_Controller {
 			$notices = $this->StudentModel->get_all_notices($log_user->faculty_Id);
 			$data['notices'] = $notices;
 			
+			//generate attachment
 
 			$this->template->layout_student('dashboard',$data);
 

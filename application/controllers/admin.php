@@ -18,6 +18,12 @@ class Admin extends CI_Controller {
 		$this->template->layout_simple('admin/admin_login');
 	}
 
+	//load registration form
+	function registration()
+	{
+		$this->template->layout_simple('admin/admin_register_page');
+	}
+
 	// admin login
 	function login_validation()
 	{
@@ -43,6 +49,36 @@ class Admin extends CI_Controller {
 			
 		}else{
 			$this->index();
+		}
+	}
+
+
+	//admin Regisration
+	public function register_validation(){
+
+		// cheack enroll id exsist
+		$enrollid  = $this->AdminModel->check_enroll_exsit($this->input->post("enroll"));
+
+		if($enrollid == false){
+
+			$data = array(
+				"enrollment_Id" => $this->input->post("enroll"),
+				"user_firstname" => $this->input->post("fname"),
+				"user_lastname" => $this->input->post("lname"),
+				"user_contact" => $this->input->post("contact"),
+				"user_email" => $this->input->post("email"),
+				"user_dob" => $this->input->post("dob"),
+				"user_password" => $this->input->post("password"),
+				"user_status" => 'active',
+				"faculty_Id" => $this->input->post("faculty_id")
+			);
+
+			$insert_id = $this->AdminModel->insert_data($data);
+			echo '{"insert_id":'.$insert_id.'}';
+
+		}else{
+			header("HTTP/1.1 400 Not Found");
+			echo '{"enroll_id":"false"}';
 		}
 	}
 
@@ -192,10 +228,10 @@ class Admin extends CI_Controller {
 
 			//if imagefile upload
 			$ori_filename = $_FILES['files']['name'];
-			$newname = time()."".str_replace($ori_filename);
+			$newname = time()."".str_replace(''.'-'.$ori_filename);
 			$config = [
 				'upload_path' => './assests/uploads/',
-				'allowed_types' => 'gif|jpg|png',
+				'allowed_types' => 'gif|jpg|png|docx|pdf',
 				'file_name' => $newname,
 			];
 
@@ -213,37 +249,25 @@ class Admin extends CI_Controller {
 						{
 								$image_filename = $this->upload->data('file_name');
 
-								$data = [
-									'title' => $this->input->post('title'),
-									'notice_type' => $this->input->post('type'),
-									'discription' => $this->input->post('description'),
-									'create_date' => date("Y-m-d",time()),
-									'update_date' => date("Y-m-d",time()),
-									'expire_date' => $this->input->post('expiredate'),
-									'notice_status' => 'Active'
-								];
 
 								$att =[
 									'attachment' =>$image_filename,
 								];
 
 								//sending log user data to author table
-								// $log_user = $this->session->userdata('log_user');
-								// $role_id = $log_user->faculty_Id;
+								
 
 								// //get notice Id
-								// $notice_Id = $this->AdminModel->getnoticeId($data);
-								// $author =[
-								// 	'faculty_Id' => $role_id,
-								// ];
+							
+								
 
 								$notice = new AdminModel;
-								$res = $notice->insertnotice($data);
-								$result = $notice->insertattachment($att);
+								$res = $notice->insertnotice($att);
 								$this->session->set_flashdata('status','notice insert successfully');
 								redirect('admin/newnotice');
 						}
-		}else{
+		}
+		else{
 			$this->newnotice();
 		}
 		
