@@ -1,0 +1,36 @@
+/*general css*/
+body{
+    margin:0;
+    padding:0;
+    background:linear-gradient(120deg,#eeaeca,#94bbe9);
+
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+ }
+
+.navbar {
+    border-radius: 0px;
+}
+
+.navbar-brand {
+    padding: 3px 3px;
+}
+
+.navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 30px;
+}
+
+.nave-bar-space{
+    padding-top: 60px;
+}
+
+
+.user-image{
+    width: 30px;
+    height: 30px;
+}

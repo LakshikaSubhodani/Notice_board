@@ -1,19 +1,28 @@
+ /*general css*/
  body{
     margin:0;
     padding:0;
-    font-family:montserrat;
     background:linear-gradient(120deg,#eeaeca,#94bbe9);
-    height:100vh;
-    overflow:hidden;
+
 }
 
+.navbar {
+    border-radius: 0px;
+}
+
+.navbar-brand {
+    padding: 3px 3px;
+}
+
+/*login page css*/
+.login-wrapper{
+    position: relative;
+    padding: 25px;
+}
 .login_center{
-    
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    width:400px;
+    margin: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     background:white;
     border-radius:10px;
 }
@@ -126,4 +135,23 @@ transition: .5s;
 
 .signup_link a:hover{
     text-decoration: underline;
+}
+
+.login-description{
+
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.login-description h1{
+    font-family: 'Paytone One', sans-serif;
+    color: #fff;
+    text-shadow: 4px 1px 4px rgba(150, 150, 150, 1);
+}
+.login-description p{
+    font-size: 20px;
+}
+
+.login-description i.fa.fa-heart{
+    color: #e74c3c;
 }

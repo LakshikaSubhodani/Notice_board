@@ -7,7 +7,8 @@
 	<title>Online_Notice_Board</title>
 	
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel = "stylesheet" type = "text/css"  href = "<?php echo base_url(); ?>assests/css/student.css">
   <?php echo '<link rel="stylesheet" href="'.base_url($cssfile_name).'">'; ?>
 
 

@@ -8,6 +8,7 @@
 	
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&display=swap" rel="stylesheet"> 
   <?php echo '<link rel="stylesheet" href="'.base_url($cssfile_name).'">'; ?>
 
 
@@ -31,7 +32,7 @@ if($urlsegmants != null && $urlsegmants[1]=='admin'){
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#>">Online notice board</a>
+      <img class="navbar-brand" src="<?php echo base_url()?>assests/img/logo.png" >
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
