@@ -16,10 +16,12 @@
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">          
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php  echo $log_user->admin_firstname .' '.$log_user->admin_lastname; ?> <b class="fa fa-angle-down"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="<?php echo base_url()?>assests/img/default-user.png" class="user-image" alt="user-image">
+                    <?php  echo $log_user->user_firstname .' '.$log_user->user_lastname; ?> 
+                    <b class="fa fa-angle-down"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><i class="fa fa-fw fa-user"></i> Edit Profile</a></li>
-                    <li><a href="#"><i class="fa fa-fw fa-cog"></i> Change Password</a></li>
+                    <li><a href="#"><i class="fa fa-fw fa-user"></i>Profile</a></li>
                     <li><a href="<?php echo base_url('admin/registration')?>"><i class="fa fa-fw fa-cog"></i> Register</a></li>
                     <li class="divider"></li>
                     <li><a href="<?php echo base_url('admin/logout')?>"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
@@ -50,7 +52,6 @@
                                 <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-group (alias)"></i> STUDENT<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                                 <ul id="submenu-2" class="collapse">
                                     <li><a href="<?php echo base_url('admin/managestudent')?>"><i class="fa fa-angle-double-right"></i> MANAGE </a></li>
-                                    <li><a href="<?php echo base_url('admin/studentfeedback')?>"><i class="fa fa-angle-double-right"></i> FEEDBACK</a></li>
                                 </ul>
                             </li>
                

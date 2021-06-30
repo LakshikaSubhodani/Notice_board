@@ -1,0 +1,18 @@
+/*dash borad*/
+.dash-title{
+    text-align: right;
+}
+.dash-button{
+    position: relative;
+    width: 150px;
+    text-align: center;
+    border: solid 2px #000;
+    padding: 3px;
+    border-radius: 3px;
+    float: left;
+    margin-right: 15px;
+}
+
+.dash-button .dash-image{
+ width: 100%;
+}

@@ -1,4 +1,4 @@
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
+/* general */
 @media(min-width:768px) {
     body {
         margin-top: 50px;
@@ -26,6 +26,22 @@
     }
 }
 
+[hidden] {
+    display: none !important;
+}
+
+.input-group .form-control {
+    z-index: 0 !important;
+}
+
+.dataTables_processing{
+    position:absolute;
+    top: 50%;
+    left: 45%;
+    padding: 15px;
+    background-color: aquamarine;
+}
+
 /* Top Navigation */
 
 .top-nav {
@@ -38,8 +54,8 @@
 }
 
 .top-nav>li>a {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     line-height: 20px;
     color: #fff;
 }
@@ -67,6 +83,12 @@
 
 .top-nav>.open>.dropdown-menu>li>a {
     white-space: normal;
+}
+
+
+.user-image{
+    width: 30px;
+    height: 30px;
 }
 
 /* Side Navigation */

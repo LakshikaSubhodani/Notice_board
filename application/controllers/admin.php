@@ -107,14 +107,131 @@ class Admin extends CI_Controller {
 
 	// New Notice
 	public function newnotice(){
-		
-		$log_user = $this->session->userdata('log_user');
 
+		$log_user = $this->session->userdata('log_user');
 		if($log_user != NULL){
 
-			//there is no any permission this load evey admin
+			$msg_success= "";
+			$msg_error= "";
+
+				if($this->input->post()){
+
+					if(!empty($this->input->post('title'))){
+
+						/* file upload */
+						// cover image
+						$attachments = array();
+						$coverimage = array();
+						$links_url = array();
+						$links_text = array();
+
+						if(!empty($_FILES['coverimage']['name'])){
+
+								$cover_image = $_FILES['coverimage']['name'];
+
+								$config['upload_path'] = 'assests/uploads/'; 
+								$config['allowed_types'] = 'gif|jpg|png';
+								$config['max_size'] = '2048';
+								$config['file_name'] = $cover_image;
+
+								$this->load->library('upload', $config);
+								$this->upload->initialize($config);
+
+								if ( ! $this->upload->do_upload('coverimage'))
+								{
+										$error = array('error' => $this->upload->display_errors());
+										$msg_error = "Cover image upload fail. Please check your file size and type.";
+								}
+								else
+								{
+									$uploadData = $this->upload->data();
+									$cover_image_name = $uploadData['file_name'];
+
+									$coverimage[$cover_image_name] = base_url().'assests/uploads/'.$cover_image_name;
+
+								}
+
+						}
+
+
+						// attachments
+						 $file_count = count($_FILES['attachments']['name']);
+						 
+						 for($i=0;$i<$file_count;$i++){
+
+							if(!empty($_FILES['attachments']['name'][$i])){
+
+								$att_name = $_FILES['attachments']['name'][$i];
+								$_FILES['file']['name'] = $att_name;
+								$_FILES['file']['type'] = $_FILES['attachments']['type'][$i];
+								$_FILES['file']['tmp_name'] = $_FILES['attachments']['tmp_name'][$i];
+								$_FILES['file']['error'] = $_FILES['attachments']['error'][$i];
+								$_FILES['file']['size'] = $_FILES['attachments']['size'][$i];
+
+								$config2['upload_path'] = 'assests/uploads/'; 
+								$config2['allowed_types'] = 'gif|jpg|png|docx|pdf';
+								$config2['max_size'] = '2216';
+								$config2['file_name'] = $att_name;
+
+								$this->load->library('upload',$config2);
+								$this->upload->initialize($config2); 
+
+								if ( ! $this->upload->do_upload('file'))
+								{
+										$error = array('error' => $this->upload->display_errors());
+										$msg_error = "Files upload fail Please check your file size and type.";
+								}
+								else
+								{
+									$uploadData = $this->upload->data();
+									$file_name = $uploadData['file_name'];
+
+									$attachments[$file_name] = base_url().'assests/uploads/'.$file_name;
+
+								}
+
+							}
+						 }
+
+						 // links
+						 if($this->input->post('links_url')){
+							$links_url = $this->input->post('links_url');
+							$links_text = $this->input->post('links_text');
+
+						 }
+						 
+						// insert data
+						$notice_data['title'] = $this->input->post('title');
+						$notice_data['discription'] = $this->input->post('content');
+						$notice_data['notice_type'] = $this->input->post('type');
+						$notice_data['expire_date'] = $this->input->post('expire_date');
+						$notice_data['notice_status'] = "active";
+						$notice_data['faculty_Id'] = $log_user->faculty_Id;
+
+
+						if(empty($msg_error)){
+							$status = $this->AdminModel->insertNotice($notice_data,$log_user,$coverimage,$attachments,$links_url,$links_text);
+						}
+						
+						if(isset($status)){
+							if($status){
+								$msg_success = "Notice insert successfully.";
+							}else{
+								$msg_error = "Notice not insert, Please try again.";
+							}
+						}
+						
+
+					}else{
+						$msg_error = "Title is required";
+					}
+
+				}
 
 				$data['log_user'] = $log_user;
+				$data['notice_error_msg'] = $msg_error;
+				$data['notice_success_msg'] = $msg_success;
+
 				$this->template->layout_admin('admin/new_notice',$data);
 
 		}else{
@@ -128,7 +245,7 @@ class Admin extends CI_Controller {
 		
 		$log_user = $this->session->userdata('log_user');
 		if($log_user != NULL){
-	//there is no any permission this load evey admin
+	    //there is no any permission this load evey admin
 			$data['log_user'] = $log_user;
 
 			$this->template->layout_admin('admin/notice_list',$data);
@@ -137,7 +254,71 @@ class Admin extends CI_Controller {
 			redirect('admin/index');
 		}
 		
+	} 
+
+	// get json respond
+	public function get_noticelist(){
+		// POST data
+		$log_user = $this->session->userdata('log_user');
+		$postData = $this->input->post();
+		// Get data
+		$data = $this->AdminModel->get_notices_list($postData,$log_user);
+		echo json_encode($data);
 	}
+
+	//delete notice
+	public function deletenotice(){
+		if($this->input->post()){
+
+			$notice_id = $this->input->post('noticeid');
+			// delete notice
+			$this->AdminModel->delete_notice($notice_id);
+	
+       		 //clean server
+			$this->load->model('StudentModel');
+			$coverimage = $this->StudentModel->get_coverimage($notice_id);
+			$attachments = $this->StudentModel->get_attachment($notice_id);
+
+
+			$path = $_SERVER['DOCUMENT_ROOT'].'/assests/uploads/'.$coverimage->cover_name;
+			unlink($path);
+
+			foreach ($attachments as  $attachment) {
+				$filepath = $_SERVER['DOCUMENT_ROOT'].'/assests/uploads/'.$attachment->attachment_name;
+				unlink($filepath);
+			}
+
+
+			redirect('admin/noticelist');
+
+		}
+		
+	}
+
+	//update notice
+	public function updatenotice(){
+		if($this->input->post()){
+
+			$notice_id = $this->input->post('noticeid');
+
+			
+
+			if($this->input->post('notice_update_title') && $this->input->post('notice_update_content')){
+
+				$title = $this->input->post('notice_update_title');
+				$discription = $this->input->post('notice_update_content');
+
+				$this->AdminModel->update_notice($notice_id,$title,$discription);
+
+				redirect('admin/noticelist');
+				
+			}else{
+				$notice = $this->AdminModel->get_notice($notice_id);
+				echo json_encode( $notice );
+			}
+		}
+	}
+    
 
 
 	//manage students
@@ -163,28 +344,6 @@ class Admin extends CI_Controller {
 		
 	}
 
-	//student feedback
-	public function studentfeedback(){
-		
-		$log_user = $this->session->userdata('log_user');
-		if($log_user != NULL){
-
-			//permssion for student feedback
-			$role_id = $log_user->faculty_Id;
-			if($role_id == 1 OR $role_id == 3 OR $role_id == 4 OR $role_id == 5 OR $role_id == 6){
-
-				$data['log_user'] = $log_user;
-				$this->template->layout_admin('admin/student_feedback',$data);
-
-			}else{
-				redirect('admin/dashboard');
-			}
-			
-		}else{
-			redirect('admin/index');
-		}
-		
-	}
 
 	//manage admins
 	public function manageadmin(){
@@ -208,70 +367,7 @@ class Admin extends CI_Controller {
 		
 	}
 
-	// get json respond
-	public function get_noticelist(){
-		// POST data
-		$postData = $this->input->post();
-		// Get data
-		$data = $this->AdminModel->getDataNotices($postData);
-		echo json_encode($data);
-	}
-	
-	//newnotice setdata to database;
-	public function set_newnotice(){
-		$this->form_validation->set_rules('title','Title','required');
-		$this->form_validation->set_rules('description','Description','required');
-		$this->form_validation->set_rules('type','Type','required');
-		$this->form_validation->set_rules('expiredate','Expiredate','required');
 
-		if($this->form_validation->run()){
-
-			//if imagefile upload
-			$ori_filename = $_FILES['files']['name'];
-			$newname = time()."".str_replace(''.'-'.$ori_filename);
-			$config = [
-				'upload_path' => './assests/uploads/',
-				'allowed_types' => 'gif|jpg|png|docx|pdf',
-				'file_name' => $newname,
-			];
-
-				$this->load->library('upload', $config);
-
-						if ( ! $this->upload->do_upload('files'))
-						{
-								$imageError = array('error' => $this->upload->display_errors());
-
-								$this->load->view('upload_form');
-								$this->template->layout_admin('admin/new_notice',$data, $imageError);
-
-						}
-						else
-						{
-								$image_filename = $this->upload->data('file_name');
-
-
-								$att =[
-									'attachment' =>$image_filename,
-								];
-
-								//sending log user data to author table
-								
-
-								// //get notice Id
-							
-								
-
-								$notice = new AdminModel;
-								$res = $notice->insertnotice($att);
-								$this->session->set_flashdata('status','notice insert successfully');
-								redirect('admin/newnotice');
-						}
-		}
-		else{
-			$this->newnotice();
-		}
-		
 	
 
-	}
 }

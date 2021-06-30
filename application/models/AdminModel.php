@@ -3,14 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class AdminModel extends CI_Model{
 
     function can_login($username,$password){
-        $this->db->select('*');
-        $this->db->from('no_admin');
-        $this->db->where('admin_email',$username);
-        $this->db->where('admin_password',$password);
 
-        $query = $this->db->get();
+        $query = $this->db->query("SELECT * FROM no_user  WHERE user_email ='$username' AND user_status = 'active';");
         $result = $query->result();
-
         return $result[0];
 
     }
@@ -33,8 +28,87 @@ class AdminModel extends CI_Model{
         return false;
     }
 
+
+
+    //new notice for database
+    public function insertNotice($notice_data,$log_user,$cover_image,$attachments,$links_url,$links_text)
+    {
+        $this->db->trans_start();
+
+        // insert notice data
+        $this->db->insert('no_notice', $notice_data);
+        $notice_id = $this->db->insert_id();
+
+        //get admin id
+        $this->db->select('admin_Id');
+        $this->db->from('no_user_admin');
+        $this->db->where('user_Id', $log_user->user_Id);
+        $query = $this->db->get();
+        $row = $query->row();
+
+        $admin_id =0;
+
+        if (isset($row)){
+            $admin_id = $row->admin_Id;
+        }
+
+        //insert author data
+        $this->db->set('admin_Id', $admin_id);
+        $this->db->set('notice_Id', $notice_id);
+        $this->db->insert('no_notice_author');
+
+        //insert cover image
+        if(!empty($cover_image)){
+            foreach ($cover_image as $key => $value) {
+            
+                $this->db->set('notice_Id', $notice_id);
+                $this->db->set('cover_name', $key);
+                $this->db->set('cover_url', $value);
+                $this->db->insert('no_coverimage');
+    
+            }        
+        }
+
+        //insert attachment
+        if(!empty($attachments)){
+            foreach ($attachments as $key => $value) {
+            
+                $this->db->set('notice_Id', $notice_id);
+                $this->db->set('attachment_name', $key);
+                $this->db->set('attachment_url', $value);
+                $this->db->insert('no_attachment');
+    
+            }        
+        }
+
+        //insert links
+        if(!empty($links_url) && !empty($links_text)){
+
+            $count = count($links_text);
+
+            for ($i=0; $i < $count ; $i++) { 
+
+                $this->db->set('notice_Id', $notice_id);
+                $this->db->set('link_name', $links_text[$i]);
+                $this->db->set('link_url', $links_url[$i]);
+                $this->db->insert('no_links');
+
+            }
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+              return false;  
+        }
+
+        return true;
+
+    }
+    
     // get notices for data table
-    function getDataNotices($postData=null){
+    function get_notices_list($postData=null,$log_user){
 
         $response = array();
 
@@ -55,62 +129,49 @@ class AdminModel extends CI_Model{
 
         ## Total number of records without filtering
         $this->db->select('count(*) as allcount');
-        $records = $this->db->get('no_notice_all_view')->result();
+        $records = $this->db->get('no_notice')->result();
         $totalRecords = $records[0]->allcount;
 
         ## Total number of record with filtering
         $this->db->select('count(*) as allcount');
         if($searchQuery != '')
             $this->db->where($searchQuery);
-        $records = $this->db->get('no_notice_all_view')->result();
+        $records = $this->db->get('no_notice')->result();
         $totalRecordwithFilter = $records[0]->allcount;
 
         ## Fetch records
         $this->db->select('*');
-        $log_user = $this->session->userdata('log_user');
+
         $role_id = $log_user->faculty_Id;
 
         //select query for database;
-        if($role_id == 1){
-            $this->db->where('faculty_Id = 1 AND notice_Status = "Active"');
-        }else if($role_id == 2 ){
-            $this->db->where('faculty_Id = 2 AND notice_Status = "Active"');
-        }else if($role_id == 3){
-            $this->db->where('faculty_Id = 3 AND notice_Status = "Active"');
-        }else if($role_id == 4){
-            $this->db->where('faculty_Id = 4 AND notice_Status = "Active"');
-        }else if($role_id == 5){
-            $this->db->where('faculty_Id = 5 AND notice_Status = "Active"');
-        }else{
-            $this->db->where('faculty_Id = 6 AND notice_Status = "Active"');
-        }
-        
-        
+        $this->db->where('faculty_Id = '.$role_id.' AND notice_Status = "Active"');
+
         if($searchQuery != '')
-            $this->db->where($searchQuery);
+        $this->db->where($searchQuery);
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
-        $records = $this->db->get('no_notice_all_view')->result();
+        $records = $this->db->get('no_notice')->result();
         $data = array();
 
         foreach($records as $record ){
 
             $data[] = array( 
-               "notice_Id"=>$record->notice_Id,
-               "title"=>$record->title,
-               "update_date"=>$record->update_date,
-               "notice_type"=>$record->notice_type,
-               "action"=>'
-                 <button type="button" class="btn btn-primary btn-xs dt-edit" style="margin-right:16px;">
-                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                "notice_Id"=>$record->notice_Id,
+                "title"=>$record->title,
+                "update_date"=>$record->update_date,
+                "notice_type"=>$record->notice_type,
+                "action"=>'
+                    <button type="button" class="btn btn-primary btn-xs dt-edit dt-update" data-noticeid="'.$record->notice_Id.'" style="margin-right:16px;">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-danger btn-xs dt-delete">
+                <button type="button" class="btn btn-danger btn-xs dt-delete" data-noticeid="'.$record->notice_Id.'" >
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>'
             ); 
-         }
+            }
 
-         ## Response
+            ## Response
         $response = array(
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecords,
@@ -118,45 +179,33 @@ class AdminModel extends CI_Model{
             "aaData" => $data
         );
 
-     return $response; 
+        return $response; 
 
     }
 
+    public function delete_notice($notice_id){
 
-    //newnotice for database
-    public function insertnotice($att)
-    {
-        $this->db->trans_start();
-            $this->db->insert('no_attachment',$att);
-            $attachment_Id = $this->db->insert_id();
-            $data = [
-                'title' => $this->input->post('title'),
-                'notice_type' => $this->input->post('type'),
-                'discription' => $this->input->post('description'),
-                'create_date' => date("Y-m-d",time()),
-                'update_date' => date("Y-m-d",time()),
-                'expire_date' => $this->input->post('expiredate'),
-                'notice_status' => 'Active',
-                'attachment_Id' => $attachment_Id
-            ];
-            //inserting data into notice
-            $this->db->insert('no_notice',$data);
-            $notice_Id = $this->db->insert_id();
+        $this->db->set('notice_status', 'delete');
+        $this->db->set('delete_date', date('Y-m-d H:i:s'));
+        $this->db->where('notice_Id', $notice_id);
+        $this->db->update('no_notice');
 
-            //inserting data into notice_author
-            $log_user = $this->session->userdata('log_user');
-			$role_id = $log_user->admin_Id;
+    }
 
-            $author =[
-                'admin_Id' => $role_id,
-                'notice_Id'=> $notice_Id
-            ];
-            
-           $this->db->insert('no_notice_author',$author);
-            $this->db->trans_complete();
+    //get notice 
+    public function get_notice($notice_id){
+        $query = $this->db->query("SELECT * FROM no_notice WHERE notice_Id = $notice_id");
+        $row = $query->row();
+        return $row;
     }
     
-    //inserting author
+    //update notice
+    public function update_notice($notice_id,$title,$discription){
+        $this->db->set('title', $title );
+        $this->db->set('discription',$discription );
+        $this->db->where('notice_Id', $notice_id);
+        $this->db->update('no_notice');
+    }
 }
 
 ?>

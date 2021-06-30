@@ -22,10 +22,11 @@
 
 
 
-  <?php  foreach ($notices as $notice) { ?>
-    <div class="notice container">
+  <?php  foreach ($posts as $post) { ?>
+    
+    <div class="notice container" id="notice<?php echo $post['post_notice']->notice_Id; ?>"  >
     <?php
-      $faculty = $notice->faculty_Id;
+      $faculty = $post['post_notice']->faculty_Id;
 
       switch ($faculty) {
         case 1:
@@ -48,29 +49,53 @@
       }
     ?> 
       
-        <div class="col-xs-11 nopadding " ><p><?php echo $notice->notice_type ?></p></div>
+        <div class="col-xs-11 nopadding " ><p><?php echo $post['post_notice']->notice_type; ?></p></div>
         <div class="col-xs-1 nopadding" > <img class="pull-right pin" src="<?php echo base_url()?>assests/img/pin.png" ></div>
       </div>
 
       <div class="row content">
-        <h4 class="content-title"><?php echo $notice->title; ?></h4>
-        <img class="content-img" src="<?php echo base_url()?>assests/img/notice-template.jpg" >
+        <h4 class="content-title"><?php echo $post['post_notice']->title; ?></h4>
+
+        <?php if(!empty($post['post_coverimage'])){ ?>
+        <img class="content-img" src="<?php echo $post['post_coverimage']->cover_url; ?>" >
+        <?php } ?>
+
         <div class="content-text">
-        <?php echo $notice->discription; ?> 
+        <?php echo $post['post_notice']->discription; ?> 
         </div>
+
+        <?php if(!empty($post['post_links'])){ ?>
+        <div class="content-attach">
+          <p>Links:</p>
+          <?php foreach ($post['post_links'] as $link) { ?>
+
+            <a href="<?php  echo $link->link_url; ?>" target="_blank" > <?php  echo $link->link_name;  ?> </a>
+            <br/>
+
+           <?php } ?>
+        </div>
+        <?php } ?>
+
+        <?php if(!empty($post['post_attachments'])){ ?>
         <div class="content-attach">
           <p>Attachments:</p>
-            <a href="#">Assignment01.pdf <i class="fa fa-download" aria-hidden="true"></i></a>
+          <?php foreach ($post['post_attachments'] as $attachment) { ?>
+
+            <a href="<?php  echo $attachment->attachment_url; ?>" target="_blank" > <?php  echo $attachment->attachment_name;  ?> <i class="fa fa-download" aria-hidden="true"></i></a>
+            <br/>
+
+           <?php } ?>
         </div>
+        <?php } ?>
+
         <div class="content-meta">
-          <p> <i class="fa fa-user" aria-hidden="true"></i> <?php echo $notice->admin_firstname.' '.$notice->admin_lastname; ?> - <span><?php echo $notice->faculty; ?></span> &nbsp; | &nbsp; <i class="fa fa-calendar-o" aria-hidden="true"></i> <?php echo $notice->update_date; ?></p>
+          <p> <i class="fa fa-user" aria-hidden="true"></i> <?php echo $post['post_author']->user_firstname.' '.$post['post_author']->user_lastname; ?> &nbsp; | &nbsp; <i class="fa fa-calendar-o" aria-hidden="true"></i> <?php echo $post['post_notice']->update_date; ?></p>
           <p> </p>
         </div>
     
       </div>
 
   </div>
-
 
    <?php } ?>
 

@@ -8,6 +8,8 @@
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap.min.css" >
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo base_url('assests/css/bootstrap-datepicker.css')?>">
     <link rel="stylesheet" href="<?php echo base_url('assests/css/admin/admin.css')?>">
     <?php echo '<link rel="stylesheet" href="'.base_url($cssfile_name).'">'; ?>
 </head>

@@ -45,7 +45,7 @@ class Student extends CI_Controller {
 		$this->form_validation->set_rules('password','Password','required');
 
 		if($this->form_validation->run()){
-			$username = $this->input->post('enroll');
+			$username = $this->input->post('enroll'); // email, enroll
 			$password = $this->input->post('password');
 
 			$db_user = $this->StudentModel->can_login($username,$password);
@@ -75,9 +75,11 @@ class Student extends CI_Controller {
 		$enrollid  = $this->StudentModel->check_enroll_exsit($this->input->post("enroll"));
 
 		if($enrollid == false){
+			$student_data = array(
+				"enrollment_Id" => $this->input->post("enroll"),
+			);
 
 			$data = array(
-				"enrollment_Id" => $this->input->post("enroll"),
 				"user_firstname" => $this->input->post("fname"),
 				"user_lastname" => $this->input->post("lname"),
 				"user_contact" => $this->input->post("contact"),
@@ -88,7 +90,7 @@ class Student extends CI_Controller {
 				"faculty_Id" => $this->input->post("faculty_id")
 			);
 
-			$insert_id = $this->StudentModel->insert_data($data);
+			$insert_id = $this->StudentModel->insert_data($data,$student_data);
 			echo '{"insert_id":'.$insert_id.'}';
 
 		}else{
@@ -107,8 +109,30 @@ class Student extends CI_Controller {
 			$data['log_user'] = $log_user;
 
 			//generate notification
-			$notices = $this->StudentModel->get_all_notices($log_user->faculty_Id);
-			$data['notices'] = $notices;
+			$faculty_id = $log_user->faculty_Id;
+			$notices = $this->StudentModel->get_all_notices($faculty_id);
+			$posts = array();
+
+			foreach ($notices as $notice) {
+
+				$authors = $this->StudentModel->get_author($notice->notice_Id);
+				$last_author = end($authors);
+
+				$coverimage = $this->StudentModel->get_coverimage($notice->notice_Id);
+				$attachment = $this->StudentModel->get_attachment($notice->notice_Id);
+				$link = $this->StudentModel->get_link($notice->notice_Id);
+
+				$post_item = array(
+					'post_notice' => $notice,
+					'post_author' => $last_author,
+					'post_coverimage'  => $coverimage,
+					'post_attachments'  => $attachment,
+					'post_links'  => $link
+			    );
+				$posts[] = $post_item;
+			}
+
+			$data['posts'] = $posts;
 			
 			//generate attachment
 

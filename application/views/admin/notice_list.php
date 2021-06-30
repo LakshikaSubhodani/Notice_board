@@ -15,6 +15,58 @@
 
 </table>
 
+</div>
 
+<!-- Modal delete -->
+<div class="modal fade" id="notice_list_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Are you sure !</h4>
+      </div>
+      <div class="modal-body">
+        <p> Do you want to continue ?</p>
+      </div>
+      <div class="modal-footer">
+		<form action="deletenotice" method="post" >
+		    <input type="text" name="noticeid" id="noticeidinput"  hidden>	
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="submit" class="btn btn-primary">Delete</button>
+		</form>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal update -->
+<div class="modal fade" id="notice_list_update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Notice</h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' action='updatenotice' >
+              <div class="form-group">
+								<label for="title">Title</label>
+								<input type="text" name="notice_update_title" id="title" class="form-control" >
+							</div>
+              <div class="form-group">
+								<label for="content">Content</label>
+								<textarea class="form-control" rows="8" id="content" name="notice_update_content"></textarea>
+							</div>   
+      </div>
+      <input type="text" name="noticeid" id="noticeidinput" hidden >	
+      <div class="modal-footer">
+		  
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="submit" class="btn btn-success">Update</button>
+		</form>
+        
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,30 @@
+.newnotice-title{
+    font-weight: 600;
+    text-align: center;
+}
+
+.editor{
+    border: solid 1px rgb(139, 139, 139);
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.insert-image img {
+    width: 100%;
+    height: auto;
+}
+
+#insert-attachment,
+#insert-links {
+    margin-bottom: 10px;
+}
+
+.publish-button{
+    margin-top: 15px;
+    text-align: right;
+}
+
+.progress{
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
