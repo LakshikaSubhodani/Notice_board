@@ -9,10 +9,26 @@ class StudentModel extends CI_Model{
         return $result[0];
     }
 
-    public function insert_data($data,$student_data)
+    public function insert_student($user_data,$student_data)
     {
-        return ($this->db->insert('no_user', $data))  ?   $this->db->insert_id()  :   false;
+        $this->db->trans_start();
 
+        //insert userdata
+        $this->db->insert('no_user', $user_data);
+        $user_id = $this->db->insert_id();
+
+        //insert student data
+        $student_data['user_Id'] = $user_id;
+        $this->db->insert('no_user_student', $student_data);
+        $student_id = $this->db->insert_id();
+
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }
+
+        return $student_id;
     }
 
     public function check_enroll_exsit($enrollId)

@@ -1,5 +1,5 @@
 <div class="admin-content">
-    <h4 ><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Notice List</h4>
+    <a href="<?php echo base_url()?>admin/noticelist"><h4 ><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Notice List</h4></a>
     <hr/>
 
     <table id="notice-list-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -26,7 +26,7 @@
         <h4 class="modal-title" id="myModalLabel">Are you sure !</h4>
       </div>
       <div class="modal-body">
-        <p> Do you want to continue ?</p>
+        <p>Delete notice. Do you want to continue ?</p>
       </div>
       <div class="modal-footer">
 		<form action="deletenotice" method="post" >

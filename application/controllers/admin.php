@@ -21,7 +21,74 @@ class Admin extends CI_Controller {
 	//load registration form
 	function registration()
 	{
-		$this->template->layout_simple('admin/admin_register_page');
+		$log_user = $this->session->userdata('log_user');
+
+		if($log_user != NULL){
+
+			$this->form_validation->set_rules('firstname','First Name','required');
+			$this->form_validation->set_rules('lastname','Last Name','required');
+			$this->form_validation->set_rules('email', 'Email', 'callback_email_check');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required');
+			$this->form_validation->set_rules('con_password', 'Password Confirmation', 'trim|required|matches[password]');
+
+
+				if($this->form_validation->run()){
+
+					$user_data = array(
+						"user_firstname" => $this->input->post("firstname"),
+						"user_lastname" => $this->input->post("lastname"),
+						"user_contact" => $this->input->post("contact"),
+						"user_email" => $this->input->post("email"),
+						"user_dob" => $this->input->post("birth_date"),
+						"user_password" => $this->input->post("password"),
+						"user_status" => 'active',
+						"faculty_Id" => $this->input->post("faculty")
+					);
+
+					$admin_data = array(
+						"admin_type" =>  $this->input->post("admin_type"),
+					);
+		
+					$this->AdminModel->insert_admin($user_data,$admin_data);
+
+					redirect('admin/registration');
+
+				}
+
+
+
+			$data['log_user'] = $log_user;
+			$this->template->layout_admin('admin/admin_register_page',$data);
+
+		}else{
+			redirect('admin/index');
+		}
+		
+	}
+
+	// callback function for register form
+	public function email_check($email){
+		// check email empty
+		if(!empty($email)){
+			// check email valide
+			 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				$this->form_validation->set_message('email_check', 'The {field} is not valid !');
+				return FALSE;
+			  }else{
+					//cheack email exist
+					$status  = $this->AdminModel->check_email_exsit($email);
+					if($status){
+						$this->form_validation->set_message('email_check', 'The {field} is exists !');
+						return FALSE;
+					}else{
+						return true;
+					}
+			  }
+
+		}else{
+			$this->form_validation->set_message('email_check', 'The {field} field is required. ');
+		   return FALSE;
+		}
 	}
 
 	// admin login
@@ -53,34 +120,7 @@ class Admin extends CI_Controller {
 	}
 
 
-	//admin Regisration
-	public function register_validation(){
 
-		// cheack enroll id exsist
-		$enrollid  = $this->AdminModel->check_enroll_exsit($this->input->post("enroll"));
-
-		if($enrollid == false){
-
-			$data = array(
-				"enrollment_Id" => $this->input->post("enroll"),
-				"user_firstname" => $this->input->post("fname"),
-				"user_lastname" => $this->input->post("lname"),
-				"user_contact" => $this->input->post("contact"),
-				"user_email" => $this->input->post("email"),
-				"user_dob" => $this->input->post("dob"),
-				"user_password" => $this->input->post("password"),
-				"user_status" => 'active',
-				"faculty_Id" => $this->input->post("faculty_id")
-			);
-
-			$insert_id = $this->AdminModel->insert_data($data);
-			echo '{"insert_id":'.$insert_id.'}';
-
-		}else{
-			header("HTTP/1.1 400 Not Found");
-			echo '{"enroll_id":"false"}';
-		}
-	}
 
 	// dashborad functions
 	public function dashboard(){
@@ -344,6 +384,16 @@ class Admin extends CI_Controller {
 		
 	}
 
+	//get Json Respond 
+	public function get_studentlist(){
+		// POST data
+		$log_user = $this->session->userdata('log_user');
+		$postData = $this->input->post();
+		// Get data
+		$data = $this->AdminModel->get_student_list($postData,$log_user);
+		echo json_encode($data);
+	}
+
 
 	//manage admins
 	public function manageadmin(){
@@ -367,7 +417,14 @@ class Admin extends CI_Controller {
 		
 	}
 
-
-	
+	//get JSON RESPOND
+	public function get_adminlist(){
+		// POST data
+		$log_user = $this->session->userdata('log_user');
+		$postData = $this->input->post();
+		// Get data
+		$data = $this->AdminModel->get_admin_list($postData,$log_user);
+		echo json_encode($data);
+	}
 
 }

@@ -1,100 +1,105 @@
-<div class="container">
-            <div class="regform">
-                <div><h1>Registration Form</h1></div>
-
-                <?php echo validation_errors(); ?>
-                <?php 
-                $attributes = array('id' => 'contact_form');
-                echo form_open('admin/register_validation',$attributes); 
-                ?>
-                
-                    <div id="reg_entno" class="reg_info ">
-                        <label for="entrollment_no" class="reg_label">Entrollment Number :</label>
-                        <input type="text" id="enrollment" placeholder="UWUCST18070"  name="enroll"  >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <?php echo form_error('enroll'); ?>
-                        <br><br>
-                    </div>
-                    <div id="reg_fname" class="reg_info"  >
-                        <label for="name_initials" class="reg_label">First Name :</label>
-                        <input type="text" id="f_name" placeholder="Amasha" name="fname" >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <br><br>
-                    </div>
-                    <div id="reg_lname" class="reg_info">
-                        <label for="full_name" class="reg_label"> Last Name :</label>
-                        <input type="text" id="l_name" placeholder="Perera"  name="lname" >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <br><br>
-                    </div>
-                    <div id="reg_dob" class="reg_info">
-                        <label for="dob" class="reg_label">Date of Birth</label>
-                        <input type="date" id="db" name="dob"  >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <br><br>
-                    </div>
-                    <div id="reg_faculty" class="reg_info">
-                        <label for="faculty" class="reg_label">Faculty :</label>
-                        <select name="faculty_id" id="f_aculty" class="select" >
-                            <option value="5" >Faculty of Animal Science and Export Agricultu</option>
-                            <option value="3" >Faculty of Applied Sciences</option>
-                            <option value="4" >Faculty of Management</option>
-                            <option value="6" >Faculty of Technological Studies</option>
+<div id="page-wrapper">
+        <div class="container-fluid">
+            <!-- Page Heading -->
+            <div class="col-sm-12 col-md-12 " id="content">
+				<h3 class="newadmin-title">New Admin</h3>
+                    <div class="row">
+						<div class="col-sm-8 col-sm-offset-2 editor">
+                        <?php if(validation_errors()){ ?>  
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<?php echo validation_errors(); ?>
+							</div>
                             
+                        <?php } ?>
+                        <form method='post' action='registration' >
+                            <div class="row">
+								<div class="col-sm-4 col-sm-offset-2">
+                                    <div class="form-group">
+                                        <label for="firstname">First Name</label>
+                                        <input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo set_value('firstname'); ?>" >
+							        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="lastname">Last Name</label>
+                                        <input type="text" name="lastname" id="lastname" class="form-control" value="<?php echo set_value('lastname'); ?>" >
+							        </div>
+                                </div>
+   
+                            </div>
+                            <div class="row">
+								<div class="col-sm-8 col-sm-offset-2">
+                                        <div class="form-group">
+											<label for="faculty">Faculty</label>
+											<select class="form-control" id="faculty" name="faculty">
+												<option value="1" <?php echo set_select('faculty', '1', TRUE); ?> >All Faculties</option>
+												<option value="2" <?php echo set_select('faculty', '2'); ?> >Union</option>
+												<option value="3" <?php echo set_select('faculty', '3'); ?> >Faculty of Applied Sciences</option>
+												<option value="4" <?php echo set_select('faculty', '4'); ?> >Faculty of Management</option>
+												<option value="5" <?php echo set_select('faculty', '5'); ?> >Faculty of Animal Science and Export Agriculture</option>
+                                                <option value="6" <?php echo set_select('faculty', '6'); ?> >Faculty of Technical Studies</option>
+											</select>
+										</div> 
+                                        <div class="form-group">
+											<label for="admin_type">Admin Type</label>
+											<select class="form-control" id="admin_type" name="admin_type">
+												<option value="Super_Admin" <?php echo set_select('admin_type', 'Super_Admin', TRUE); ?> >Super Admin</option>
+												<option value="Union_Admin" <?php echo set_select('admin_type', 'Union_Admin'); ?> >Union Admin</option>
+												<option value="Applied_Faculty_Admin" <?php echo set_select('admin_type', 'Applied_Faculty_Admin'); ?> >Applied Faculty Admin</option>
+												<option value="Management_Faculty_Admin" <?php echo set_select('admin_type', 'Management_Faculty_Admin'); ?> >Management Faculty Admin</option>
+												<option value="Agri_Faculty_Admin" <?php echo set_select('admin_type', 'Agri_Faculty_Admin'); ?> >Agri Faculty Admin</option>
+                                                <option value="Technical_Faculty_Admin" <?php echo set_select('admin_type', 'Technical_Faculty_Admin'); ?> >Technical Faculty Admin</option>
+											</select>
+										</div> 
+                                        <div class="form-group">
+                                        <label for="birth_date">Date of Birth</label>
+                                            <div class="input-group date" >
+                                                <input type="text" class="form-control" id="birth_date" name="birth_date" value="<?php echo set_value('birth_date'); ?>" >
+                                                    <div class="input-group-addon">
+											            <span class="glyphicon glyphicon-th"></span>
+										            </div>
+                                            </div>
+                                        </div>
 
-                        </select>
-                        
-                        <br><br>
-                    </div>
-                    <div id="reg_email" class="reg_info">
-                        <label for="email" class="reg_label">E-mail :</label>
-                        <input type="email" id="e_mail" placeholder="xxxxxxxx@std.uwu.ac.lk" name="email"  >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <br><br>
-                    </div>
-                    <div id="reg_pwd" class="reg_info">
-                        <label for="password" class="reg_label">Password :</label>
-                        <input type="password" id="p_word" name="password"  >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>    
-                        <br><br>
-                    </div>
-                    <div id="reg_conpwd" class="reg_info">
-                        <label for="con_password" class="reg_label" >Confirm Password :</label>
-                        <input type="password" id="c_word" name="passwordagain"  >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <br><br>
-                    </div>
+                                </div>
 
-                    <div id="reg_pno" class="reg_info">
-                        <label for="phone_no"class="reg_label" >Phone Number :</label>
-                        <input type="tel" id="c_tact" name="contact"  >
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                        <small>Error message</small>
-                        <br><br>
-                    </div> 
-                    <!--success message-->
-            
+                            </div>
+                            <div class="row">
+								<div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-group">
+                                        <label for="email" >E-mail</label>
+                                        <input type="email" id="email" placeholder="xxxxxxxx@uwu.ac.lk" name="email" class="form-control" value="<?php echo set_value('email'); ?>"  >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contact" >Phone Number</label>
+                                        <input type="tel" id="contact" name="contact" class="form-control" value="<?php echo set_value('contact'); ?>"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+								<div class="col-sm-4 col-sm-offset-2">
+                                    <div class="form-group">
+                                        <label for="password" >Password</label>
+                                        <input type="password" id="password" name="password" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="con_password">Confirm Password</label>
+                                        <input type="password" id="con_password" name="con_password" class="form-control" >
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div id="reg_submit" class="reg_info"> 
-                    <button type="submit" class="submit"  >Submit </button>          
+
+                            <div class="publish-button">
+								<button type="submit" class="btn btn-primary">Register</button>
+							</div>	
+
+                        </form>
+                        </div>
                     </div>
-
-                
-               </form>   
-
             </div>
+        </div>    
+</div>

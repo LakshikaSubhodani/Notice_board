@@ -3,14 +3,39 @@ body{
     background: linear-gradient(120deg,#eeaeca,#94bbe9);
     align-items: center;
     justify-content: center;
-    font-family: sans-serif;
     min-height: 100vh;
     margin:0;
 }
+
+/*navigation bar*/
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+ }
+
+.navbar {
+    border-radius: 0px;
+}
+
+.navbar-brand {
+    padding: 3px 3px;
+}
+
+.navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 30px;
+}
+
+.nave-bar-space{
+    padding-top: 60px;
+}
+
+/*register page*/
+
 .container{
-    
     position: absolute;
-    top:100%;
+    top:85%;
     left:50%;
     transform:translate(-50%, -50%);
     width:60%;
@@ -26,7 +51,7 @@ body{
     border-bottom:2px solid silver;
 }
 .reg_info{  
-   margin-bottom: 5px; 
+   margin-bottom: -20px; 
    padding-bottom: 10px;
    position: relative;
 }
@@ -126,6 +151,7 @@ body{
     border-radius: 10px;
     letter-spacing: 1px;
     background: linear-gradient(120deg,#e92077,#1b76dd);
+    margin-bottom: 30px;
    
 }
 

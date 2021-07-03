@@ -79,7 +79,7 @@ class Student extends CI_Controller {
 				"enrollment_Id" => $this->input->post("enroll"),
 			);
 
-			$data = array(
+			$user_data = array(
 				"user_firstname" => $this->input->post("fname"),
 				"user_lastname" => $this->input->post("lname"),
 				"user_contact" => $this->input->post("contact"),
@@ -90,7 +90,7 @@ class Student extends CI_Controller {
 				"faculty_Id" => $this->input->post("faculty_id")
 			);
 
-			$insert_id = $this->StudentModel->insert_data($data,$student_data);
+			$insert_id = $this->StudentModel->insert_student($user_data,$student_data);
 			echo '{"insert_id":'.$insert_id.'}';
 
 		}else{

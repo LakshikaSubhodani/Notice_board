@@ -11,15 +11,34 @@ class AdminModel extends CI_Model{
     }
 
     //insert data into admin
-    public function insert_data($data)
+    public function insert_admin($user_data,$admin_data)
     {
-        return ($this->db->insert('no_user', $data))  ?   $this->db->insert_id()  :   false;
+        $this->db->trans_start();
+
+        //insert userdata
+        $this->db->insert('no_user', $user_data);
+        $user_id = $this->db->insert_id();
+
+        $admin_data['user_Id'] = $user_id;
+
+        //insert admin data
+        $this->db->insert('no_user_admin', $admin_data); 
+        $admin_id = $this->db->insert_id();       
+
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }
+
+        return $admin_id;
+
 
     }
 
-    public function check_enroll_exsit($enrollId)
+    public function check_email_exsit($email)
     {
-        $query = $this->db->query("SELECT * FROM no_user WHERE enrollment_Id = '".$enrollId."'");
+        $query = $this->db->query("SELECT * FROM no_user WHERE user_email = '".$email."'");
         $row = $query->row();
         
         if(isset($row)){
@@ -205,6 +224,153 @@ class AdminModel extends CI_Model{
         $this->db->set('discription',$discription );
         $this->db->where('notice_Id', $notice_id);
         $this->db->update('no_notice');
+    }
+
+    //get student record for data table
+    public function get_student_list($postData = null,$log_user){
+        $response = array();
+
+        ## Read value
+        $draw = $postData['draw'];
+        $start = $postData['start'];
+        $rowperpage = $postData['length']; // Rows display per page
+        $columnIndex = $postData['order'][0]['column']; // Column index
+        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+        $searchValue = $postData['search']['value']; // Search value
+
+         ## Search 
+         $searchQuery = "";
+         if($searchValue != ''){
+             $searchQuery = " (enrollment_Id like '%".$searchValue."%' or user_firstname like '%".$searchValue."%' or user_email like'%".$searchValue."%' ) ";
+         }
+
+         ## Total number of records without filtering
+        $this->db->select('count(*) as allcount');
+        $records = $this->db->get('no_student_view')->result();
+        $totalRecords = $records[0]->allcount;
+
+         ## Total number of record with filtering
+         $this->db->select('count(*) as allcount');
+         if($searchQuery != '')
+             $this->db->where($searchQuery);
+         $records = $this->db->get('no_student_view')->result();
+         $totalRecordwithFilter = $records[0]->allcount;
+
+          ## Fetch records
+        $this->db->select('*');
+
+        $role_id = $log_user->faculty_Id;
+
+        //select query for database;
+        $this->db->where('user_status = "Active"');
+
+        if($searchQuery != '')
+        $this->db->where($searchQuery);
+        $this->db->order_by($columnName, $columnSortOrder);
+        $this->db->limit($rowperpage, $start);
+        $records = $this->db->get('no_student_view')->result();
+        $data = array();
+
+        foreach($records as $record ){
+
+            $data[] = array( 
+                "enrollment_Id"=>$record->enrollment_Id,
+                "user_firstname"=>$record->user_firstname,
+                "user_lastname"=>$record->user_lastname,
+                "user_email"=>$record->user_email,
+                "faculty"=>$record->faculty,
+                "action"=>'
+                
+                <button type="button" class="btn btn-danger btn-xs dt-delete"  >
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>'
+            ); 
+            }
+
+             ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+
+        return $response; 
+ 
+    }
+
+    //get admin record for data table
+    public function get_admin_list($postData = null,$log_user){
+        $response = array();
+
+         ## Read value
+         $draw = $postData['draw'];
+         $start = $postData['start'];
+         $rowperpage = $postData['length']; // Rows display per page
+         $columnIndex = $postData['order'][0]['column']; // Column index
+         $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+         $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+         $searchValue = $postData['search']['value']; // Search value
+
+          ## Search 
+          $searchQuery = "";
+          if($searchValue != ''){
+              $searchQuery = " (faculty like '%".$searchValue."%' or user_firstname like '%".$searchValue."%' or user_email like'%".$searchValue."%' ) ";
+          }
+
+           ## Total number of records without filtering
+        $this->db->select('count(*) as allcount');
+        $records = $this->db->get('no_admin_view')->result();
+        $totalRecords = $records[0]->allcount;
+
+         ## Total number of record with filtering
+         $this->db->select('count(*) as allcount');
+         if($searchQuery != '')
+             $this->db->where($searchQuery);
+         $records = $this->db->get('no_admin_view')->result();
+         $totalRecordwithFilter = $records[0]->allcount;
+
+           ## Fetch records
+        $this->db->select('*');
+
+        $role_id = $log_user->faculty_Id;
+
+        //select query for database;
+        $this->db->where('user_status = "Active"');
+
+        if($searchQuery != '')
+        $this->db->where($searchQuery);
+        $this->db->order_by($columnName, $columnSortOrder);
+        $this->db->limit($rowperpage, $start);
+        $records = $this->db->get('no_admin_view')->result();
+        $data = array();
+
+
+        foreach($records as $record ){
+
+            $data[] = array( 
+                "user_firstname"=>$record->user_firstname,
+                "user_lastname"=>$record->user_lastname,
+                "user_email"=>$record->user_email,
+                "faculty"=>$record->faculty,
+                "action"=>'
+                
+                <button type="button" class="btn btn-danger btn-xs dt-delete"  >
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>'
+            ); 
+            }
+ 
+                 ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+
+        return $response; 
     }
 }
 
