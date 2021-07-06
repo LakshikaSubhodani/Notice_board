@@ -11,6 +11,11 @@ body{
     margin: 0 !important;
  }
 
+ .error{
+     color: red;
+     font-size: 11px;
+ }
+ /*navugation */
 .navbar {
     border-radius: 0px;
 }

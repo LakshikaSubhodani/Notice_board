@@ -4,7 +4,8 @@ class StudentModel extends CI_Model{
 
     public function can_login($username,$password){
 
-        $query = $this->db->query("SELECT * FROM no_user u LEFT JOIN no_user_student s ON u.user_Id = s.user_Id WHERE u.user_status = 'active' and u.user_password = '$password' AND u.user_email ='$username' OR s.enrollment_Id = '$username'");
+        $query = $this->db->query("SELECT * FROM no_user u LEFT JOIN no_user_student s ON u.user_Id = s.user_Id WHERE u.user_status = 'active' and u.user_password = '$password' AND ( u.user_email ='$username' OR s.enrollment_Id = '$username') ");
+
         $result = $query->result();
         return $result[0];
     }
@@ -31,6 +32,21 @@ class StudentModel extends CI_Model{
         return $student_id;
     }
 
+    public function update_student($user_data, $user_id)
+    {
+        
+        $this->db->where('user_Id', $user_id);
+        $this->db->update('no_user', $user_data);
+    }
+
+    public function get_student($user_id){
+
+        $query = $this->db->query("SELECT * FROM no_user u LEFT JOIN no_user_student s ON u.user_Id = s.user_Id WHERE u.user_status = 'active' and u.user_Id = '$user_id'");
+        $result = $query->result();
+        return $result[0];
+    }
+
+
     public function check_enroll_exsit($enrollId)
     {
         $query = $this->db->query("SELECT * FROM no_user_student WHERE enrollment_Id = '".$enrollId."'");
@@ -42,14 +58,35 @@ class StudentModel extends CI_Model{
         return false;
     }
 
+    public function check_password_exsit($old_password)
+    {
+        $query = $this->db->query("SELECT * FROM no_user WHERE user_password = '".$old_password."'");
+        $row = $query->row();
+        
+        if(isset($row)){
+            return true;
+        }
+        return false;
+    }
+
     /** get notices infor  */
-    public function get_all_notices($facultyId){
+    public function get_all_notices($facultyId, $searchkey = null){
 
         $query = $this->db->query("SELECT * FROM no_notice WHERE notice_status = 'active' AND faculty_Id IN (1, 2, $facultyId) ORDER BY notice_Id DESC");
+       
+
+        if($searchkey != null){
+            $this->db->select('*');
+            $this->db->from('no_notice');
+            $this->db->like('title', $searchkey);
+            $query = $this->db->get(); 
+        }
         $result = $query->result();
         return $result;
    
     }
+
+
 
     public function get_author($NoticeId){
 

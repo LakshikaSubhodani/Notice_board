@@ -21,7 +21,7 @@
                     <?php  echo $log_user->user_firstname .' '.$log_user->user_lastname; ?> 
                     <b class="fa fa-angle-down"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><i class="fa fa-fw fa-user"></i>Profile</a></li>
+                    <li><a href="<?php echo base_url('admin/profile')?>"><i class="fa fa-fw fa-user"></i>Profile</a></li>
                     <li class="divider"></li>
                     <li><a href="<?php echo base_url('admin/logout')?>"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
                 </ul>

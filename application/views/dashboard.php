@@ -2,16 +2,21 @@
 
 <div class="row">
         <div class="col-xs-12 col-md-6 col-md-offset-3 col-lg-8 col-lg-offset-2 ">
-
+        <form action="dashboard" method="GET">
             <div id="notice-search-input">
                 <div class="input-group col-md-12">
-                    <input type="text" class="form-control input-sm" placeholder="Search Notices.." />
+                    <input type="text" class="form-control input-sm" placeholder="Search Notices.." name="Search" />
                     <span class="input-group-btn">
-                        <button class="btn btn-info btn-sm" type="button">
+                        <button class="btn btn-info btn-sm" type="submit">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                     </span>
                 </div>
+            </div>
+           </form> 
+           <div class="btn-group grid-view-button" role="group" aria-label="...">
+           <a class="btn btn-default active" href="<?php echo base_url()?>student/dashboard/list" role="button"><i class="fa fa-th-list" aria-hidden="true"></i></a>
+           <a class="btn btn-default" href="<?php echo base_url()?>student/dashboard/grid" role="button"><i class="fa fa-th-large" aria-hidden="true"></i></a>
             </div>
         </div>
 	</div>
@@ -19,8 +24,7 @@
 <div class="row">
 
   <div class="col-xs-12 col-md-6 col-md-offset-3 col-lg-8 col-lg-offset-2 ">
-
-
+ 
 
   <?php  foreach ($posts as $post) { ?>
     
@@ -102,6 +106,8 @@
 
 
   </div>
+
+  
 
 </div>
 

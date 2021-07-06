@@ -25,7 +25,7 @@
             <?php echo $log_user->user_firstname.' '.$log_user->user_lastname  ; ?><span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Profile</a></li>
+            <li><a href="<?php echo base_url('student/profile')?>"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Profile</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="<?php echo base_url('student/logout')?>"><i class="fa fa-fw fa-power-off"></i>  Logout</a></li>
           </ul>

@@ -10,6 +10,7 @@ $(document).ready(function() {
            'url':'get_adminlist'
         },
         'columns': [
+            {data: 'user_Id'},
            { data: 'user_firstname' },
            { data: 'user_lastname' },
            { data: 'user_email' },
@@ -17,4 +18,13 @@ $(document).ready(function() {
            { data: 'action' },
         ]
     });
+
+     // data table delete button click
+   $('#manage-admin-table tbody').on('click', 'td button.dt-delete', function (){
+
+    var admin_id = $(this).data().adminid;
+    $('#adminidinput').val(admin_id);
+    $('#admin_list_delete').modal('show');
+
+    });  
 });

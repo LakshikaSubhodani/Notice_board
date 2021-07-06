@@ -139,6 +139,21 @@ class Admin extends CI_Controller {
 		
 	}
 
+	//profile
+	public function profile(){
+		$log_user = $this->session->userdata('log_user');
+
+		if($log_user != NULL){
+
+			$data['log_user'] = $log_user;
+
+			$this->template->layout_admin('admin/admin_profile',$data);
+
+		}else{
+			redirect('admin/index');
+		}
+	}
+
 	// logout
 	public function logout(){
 		$this->session->unset_userdata('log_user');
@@ -394,6 +409,15 @@ class Admin extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	//delete student
+	public function deletestudent(){
+		if($this->input->post()){
+
+			$student_id = $this->input->post('studentid');
+			$this->AdminModel->delete_student($student_id);
+			redirect('admin/managestudent');
+		}
+	}
 
 	//manage admins
 	public function manageadmin(){
@@ -425,6 +449,17 @@ class Admin extends CI_Controller {
 		// Get data
 		$data = $this->AdminModel->get_admin_list($postData,$log_user);
 		echo json_encode($data);
+	}
+
+	//delete admin list
+	public function deleteadmin(){
+		if($this->input->post()){
+			$admin_id = $this->input->post('adminid');
+
+			$this->AdminModel->delete_admin($admin_id);
+
+			redirect('admin/manageadmin');
+		}
 	}
 
 }

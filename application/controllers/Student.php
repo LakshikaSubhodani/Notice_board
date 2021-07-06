@@ -100,7 +100,7 @@ class Student extends CI_Controller {
 	}
 
 	// dashborad functions
-	public function dashboard(){
+	public function dashboard($view = null){
 		
 		$log_user = $this->session->userdata('log_user');
 
@@ -110,7 +110,15 @@ class Student extends CI_Controller {
 
 			//generate notification
 			$faculty_id = $log_user->faculty_Id;
-			$notices = $this->StudentModel->get_all_notices($faculty_id);
+
+			if($this->input->get('Search')){
+				
+				$searchkey  = $this->input->get('Search');
+				$notices = $this->StudentModel->get_all_notices($faculty_id, $searchkey);
+			}else{
+				$notices = $this->StudentModel->get_all_notices($faculty_id);
+			}
+
 			$posts = array();
 
 			foreach ($notices as $notice) {
@@ -135,13 +143,79 @@ class Student extends CI_Controller {
 			$data['posts'] = $posts;
 			
 			//generate attachment
-
-			$this->template->layout_student('dashboard',$data);
+			if($view == 'grid'){
+				$this->template->layout_student('dashboard_grid',$data);
+			}else{
+				$this->template->layout_student('dashboard',$data);
+			}
 
 		}else{
 			redirect('student/index');
 		}
 		
+	}
+
+	//profile
+	public function profile(){
+		$log_user = $this->session->userdata('log_user');
+		$data['log_user'] = $log_user;
+
+		if($log_user != NULL){
+			
+
+			$this->form_validation->set_rules('fname','First Name','required');
+			$this->form_validation->set_rules('lname','Last Name','required');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+			$this->form_validation->set_rules('contact', 'Contact', 'required');
+			$this->form_validation->set_rules('dob', 'Date of birth', 'required');
+			$this->form_validation->set_rules('old_password', 'Old Password', 'callback_password_check');
+
+				if($this->form_validation->run()){
+
+					$user_data = array(
+						"user_firstname" => $this->input->post("fname"),
+						"user_lastname" => $this->input->post("lname"),
+						"user_contact" => $this->input->post("contact"),
+						"user_email" => $this->input->post("email"),
+						"user_dob" => $this->input->post("dob"),
+					);
+
+					$new_password = $this->input->post("new_password");
+					if(!empty($new_password)){
+						$user_data["user_password"] = $new_password;
+					}
+
+					// update profile
+					$user_id = $log_user->user_Id;
+
+					$this->StudentModel-> update_student($user_data, $user_id);
+					$db_user = $this->StudentModel->get_student($user_id);	
+					$this->session->set_userdata('log_user',$db_user);
+					$log_user = $this->session->userdata('log_user');
+
+					$data['log_user'] = $log_user;
+
+				}
+
+			$this->template->layout_student('student_profile',$data);
+		}else{
+			redirect('student/index');
+		}
+		
+	}
+
+	public function password_check($old_password){
+
+		if(!empty($old_password)){
+			$status = $this->StudentModel-> check_password_exsit($old_password);
+			if($status){
+				return true;
+			}else{
+				$this->form_validation->set_message('password_check', 'The {field} does not match !');
+				return FALSE;
+			}
+		}
+
 	}
 
 	// logout

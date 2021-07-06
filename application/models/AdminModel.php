@@ -47,7 +47,7 @@ class AdminModel extends CI_Model{
         return false;
     }
 
-
+    
 
     //new notice for database
     public function insertNotice($notice_data,$log_user,$cover_image,$attachments,$links_url,$links_text)
@@ -275,6 +275,7 @@ class AdminModel extends CI_Model{
         foreach($records as $record ){
 
             $data[] = array( 
+                "user_Id"=>$record->user_Id,
                 "enrollment_Id"=>$record->enrollment_Id,
                 "user_firstname"=>$record->user_firstname,
                 "user_lastname"=>$record->user_lastname,
@@ -282,7 +283,7 @@ class AdminModel extends CI_Model{
                 "faculty"=>$record->faculty,
                 "action"=>'
                 
-                <button type="button" class="btn btn-danger btn-xs dt-delete"  >
+                <button type="button" class="btn btn-danger btn-xs dt-delete" data-studentid="'.$record->user_Id.'" >
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>'
             ); 
@@ -298,6 +299,13 @@ class AdminModel extends CI_Model{
 
         return $response; 
  
+    }
+
+    //delete student
+    public function delete_student($student_id){
+        $this->db->set('user_status', 'delete');
+        $this->db->where('user_Id', $student_id);
+        $this->db->update('no_user');
     }
 
     //get admin record for data table
@@ -350,13 +358,14 @@ class AdminModel extends CI_Model{
         foreach($records as $record ){
 
             $data[] = array( 
+                "user_Id" => $record->user_Id,
                 "user_firstname"=>$record->user_firstname,
                 "user_lastname"=>$record->user_lastname,
                 "user_email"=>$record->user_email,
                 "faculty"=>$record->faculty,
                 "action"=>'
                 
-                <button type="button" class="btn btn-danger btn-xs dt-delete"  >
+                <button type="button" class="btn btn-danger btn-xs dt-delete" data-adminid="'.$record->user_Id.'" >
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>'
             ); 
@@ -371,6 +380,12 @@ class AdminModel extends CI_Model{
         );
 
         return $response; 
+    }
+
+    public function delete_admin($admin_id){
+        $this->db->set('user_status', 'delete');
+        $this->db->where('user_Id', $admin_id);
+        $this->db->update('no_user');
     }
 }
 

@@ -50,7 +50,8 @@
 .notice{
     position: relative;
     width: 100%;
-    min-height: 200px;
+    height: 350px;
+    overflow:hidden;
     background-color: #fff;
     margin-top: 5px;
     margin-bottom: 15px;
@@ -86,7 +87,7 @@
 }
 
 .notice .content{
-    padding: 3px 5px;
+    padding: 3px 10px;
 }
 
 .notice .content .content-title{
@@ -101,6 +102,7 @@
 
 .notice .content .content-text{
     font-size: 14px;
+    text-align: justify;
 }
 
 .notice .content .content-meta{
@@ -116,4 +118,16 @@
 .notice .content .content-meta p{
     font-weight: 600;
     margin: 0;
+}
+
+.notice .notice-view-button-wrapper{
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    padding: 15px;
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 69%, rgba(255,255,255,0) 100%); 
 }
