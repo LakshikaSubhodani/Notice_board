@@ -25,6 +25,9 @@ class AdminModel extends CI_Model{
         $this->db->insert('no_user_admin', $admin_data); 
         $admin_id = $this->db->insert_id();       
 
+        // set log
+        $this->set_log("Insert new Admin. Id - ". $user_id);
+
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE)
         {
@@ -34,6 +37,23 @@ class AdminModel extends CI_Model{
         return $admin_id;
 
 
+    }
+
+    public function update_admin($user_data, $user_id)
+    {
+        
+        $this->db->where('user_Id', $user_id);
+        $this->db->update('no_user', $user_data);
+        // set log
+        $this->set_log("Upadte new Admin. Id - ". $user_id);
+
+    }
+
+    public function get_admin($user_id){
+
+        $query = $this->db->query("SELECT * FROM no_user u LEFT JOIN no_user_admin s ON u.user_Id = s.user_Id WHERE u.user_status = 'active' and u.user_Id = '$user_id'");
+        $result = $query->result();
+        return $result[0];
     }
 
     public function check_email_exsit($email)
@@ -47,6 +67,24 @@ class AdminModel extends CI_Model{
         return false;
     }
 
+    public function check_password_exsit($old_password)
+    {
+        $query = $this->db->query("SELECT * FROM no_user WHERE user_password = '".$old_password."'");
+        $row = $query->row();
+        
+        if(isset($row)){
+            return true;
+        }
+        return false;
+    }
+
+
+    //get top notices
+    public function get_topnotices(){
+        $query = $this->db->query("SELECT title,update_date FROM no_notice where notice_status = 'active'  ORDER BY notice_Id DESC LIMIT 7");
+        $result = $query->result();
+        return $result;
+    }
     
 
     //new notice for database
@@ -114,6 +152,9 @@ class AdminModel extends CI_Model{
 
             }
         }
+        
+        // set log
+        $this->set_log("Create new notice. Id - ". $notice_id);
 
         $this->db->trans_complete();
 
@@ -209,6 +250,9 @@ class AdminModel extends CI_Model{
         $this->db->where('notice_Id', $notice_id);
         $this->db->update('no_notice');
 
+         // set log
+         $this->set_log("Delete notice. Id - ". $notice_id);
+
     }
 
     //get notice 
@@ -224,6 +268,9 @@ class AdminModel extends CI_Model{
         $this->db->set('discription',$discription );
         $this->db->where('notice_Id', $notice_id);
         $this->db->update('no_notice');
+
+        // set log
+        $this->set_log("Update notice. Id - ". $notice_id);
     }
 
     //get student record for data table
@@ -306,6 +353,9 @@ class AdminModel extends CI_Model{
         $this->db->set('user_status', 'delete');
         $this->db->where('user_Id', $student_id);
         $this->db->update('no_user');
+
+        // set log
+        $this->set_log("Delete Student. Id - ". $student_id);
     }
 
     //get admin record for data table
@@ -386,6 +436,30 @@ class AdminModel extends CI_Model{
         $this->db->set('user_status', 'delete');
         $this->db->where('user_Id', $admin_id);
         $this->db->update('no_user');
+
+        // set log
+        $this->set_log("Delete Admin. Id - ". $admin_id);
+    }
+
+
+    // insert sys logs
+
+    public function set_log($activity){
+         
+        $log_user = $this->session->userdata('log_user');
+
+        $this->db->set('activity', $activity);
+        $this->db->set('user_id', $log_user->user_Id);
+        $this->db->insert('no_system_log');
+    }
+
+    public function get_log(){
+
+        $query = $this->db->query("SELECT s.system_log_Id, s.activity, u.user_firstname, u.user_lastname, s.date  FROM no_system_log s INNER JOIN no_user u ON s.user_Id = u.user_Id  ORDER BY system_log_Id DESC LIMIT 10");
+        $result = $query->result();
+        return $result;
+
+        return false;
     }
 }
 

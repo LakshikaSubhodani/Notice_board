@@ -23,6 +23,9 @@ class StudentModel extends CI_Model{
         $this->db->insert('no_user_student', $student_data);
         $student_id = $this->db->insert_id();
 
+        // set log
+        $this->set_log("Register new Student. Id - ". $user_id);
+
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE)
         {
@@ -37,6 +40,9 @@ class StudentModel extends CI_Model{
         
         $this->db->where('user_Id', $user_id);
         $this->db->update('no_user', $user_data);
+
+         // set log
+         $this->set_log("Update Student. Id - ". $user_id);
     }
 
     public function get_student($user_id){
@@ -119,6 +125,16 @@ class StudentModel extends CI_Model{
         $query = $this->db->query("SELECT * FROM no_links WHERE notice_Id = $NoticeId;");
         $result = $query->result();
         return $result;
+    }
+
+    // insert sys logs
+    public function set_log($activity){
+        
+        $log_user = $this->session->userdata('log_user');
+
+        $this->db->set('activity', $activity);
+        $this->db->set('user_id', $log_user->user_Id);
+        $this->db->insert('no_system_log');
     }
 
 

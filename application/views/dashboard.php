@@ -2,7 +2,7 @@
 
 <div class="row">
         <div class="col-xs-12 col-md-6 col-md-offset-3 col-lg-8 col-lg-offset-2 ">
-        <form action="dashboard" method="GET">
+        <form action="" method="GET">
             <div id="notice-search-input">
                 <div class="input-group col-md-12">
                     <input type="text" class="form-control input-sm" placeholder="Search Notices.." name="Search" />

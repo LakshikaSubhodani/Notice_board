@@ -131,6 +131,12 @@ class Admin extends CI_Controller {
 
 			$data['log_user'] = $log_user;
 
+			$data['top_notices'] =$this->AdminModel->get_topnotices();
+
+			$data['top_activities'] =$this->AdminModel->get_log();
+
+			
+
 			$this->template->layout_admin('admin/dashboard',$data);
 
 		}else{
@@ -142,16 +148,62 @@ class Admin extends CI_Controller {
 	//profile
 	public function profile(){
 		$log_user = $this->session->userdata('log_user');
-
+		$data['log_user'] = $log_user;
 		if($log_user != NULL){
 
-			$data['log_user'] = $log_user;
+			$this->form_validation->set_rules('fname','First Name','required');
+			$this->form_validation->set_rules('lname','Last Name','required');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+			$this->form_validation->set_rules('contact', 'Contact', 'required');
+			$this->form_validation->set_rules('dob', 'Date of birth', 'required');
+			$this->form_validation->set_rules('old_password', 'Old Password', 'callback_password_check');
+
+				if($this->form_validation->run()){
+					$user_data = array(
+						"user_firstname" => $this->input->post("fname"),
+						"user_lastname" => $this->input->post("lname"),
+						"user_contact" => $this->input->post("contact"),
+						"user_email" => $this->input->post("email"),
+						"user_dob" => $this->input->post("dob"),
+					);
+
+					$new_password = $this->input->post("new_password");
+					if(!empty($new_password)){
+						$user_data["user_password"] = $new_password;
+					}
+
+					// update profile
+					$user_id = $log_user->user_Id;
+
+					$this->AdminModel-> update_admin($user_data, $user_id);
+					$db_user = $this->AdminModel->get_admin($user_id);	
+					$this->session->set_userdata('log_user',$db_user);
+					$log_user = $this->session->userdata('log_user');
+
+					$data['log_user'] = $log_user;
+
+				}			
 
 			$this->template->layout_admin('admin/admin_profile',$data);
 
 		}else{
 			redirect('admin/index');
 		}
+	}
+
+	//password check
+	public function password_check($old_password){
+
+		if(!empty($old_password)){
+			$status = $this->AdminModel-> check_password_exsit($old_password);
+			if($status){
+				return true;
+			}else{
+				$this->form_validation->set_message('password_check', 'The {field} does not match !');
+				return FALSE;
+			}
+		}
+
 	}
 
 	// logout

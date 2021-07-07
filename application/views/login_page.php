@@ -7,7 +7,7 @@
 			
 			
 			<h1>Login</h1>
-			<?php echo $this->session->flashdata("error"); ?>
+			<span class="text-danger"><?php echo $this->session->flashdata("error"); ?></span>
 
 			<form action="<?php echo site_url('student/login_validation')?>" method="POST">
 					<div class="login_txt_field">

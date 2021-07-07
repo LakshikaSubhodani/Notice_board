@@ -2,20 +2,21 @@
     <a href="<?php echo base_url()?>admin/managestudent"><h4 ><i class="fa fa-fw fa-group (alias)"></i>Student Management</h4></a>
     <hr/>
 
-    <table id="manage-student-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
-	<thead>
-		<tr>
-			<th>Studnt ID</th>
-			<th>Enrollment ID</th>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Email</th>
-			<th>Faculty</th>
-			<th>Action</th>
-		</tr>
-	</thead>
-
-</table>
+    <div class="col-sm-12 col-md-12 ">
+      <table id="manage-student-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>Studnt ID</th>
+          <th>Enrollment ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Faculty</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+     </table>
+    </div>
 
 </div>
 

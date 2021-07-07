@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		
 		
 		<h1>Login</h1>
-		<?php echo $this->session->flashdata("error"); ?>
+		<span class="text-danger"><?php echo $this->session->flashdata("error"); ?></span>
 		<form action="<?php echo site_url('Admin/login_validation')?>" method="POST">
 		
 				<div class="adlogin_txt_field">

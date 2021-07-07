@@ -2,6 +2,7 @@
     <a href="<?php echo base_url()?>admin/noticelist"><h4 ><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Notice List</h4></a>
     <hr/>
 
+    <div class="col-sm-12 col-md-12 ">
     <table id="notice-list-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
 	<thead>
 		<tr>
@@ -14,6 +15,7 @@
 	</thead>
 
 </table>
+</div>
 
 </div>
 

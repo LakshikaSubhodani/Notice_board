@@ -155,3 +155,8 @@ transition: .5s;
 .login-description i.fa.fa-heart{
     color: #e74c3c;
 }
+
+.text-danger{
+    color: #e74c3c;
+    font-weight: 700;
+}

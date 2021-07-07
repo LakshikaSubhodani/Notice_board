@@ -2,7 +2,7 @@
 
 <div class="row">
         <div class="col-xs-12 col-md-12 ">
-        <form action="dashboard" method="GET">
+        <form action="" method="GET">
             <div id="notice-search-input">
                 <div class="input-group col-md-12">
                     <input type="text" class="form-control input-sm" placeholder="Search Notices.." name="Search" />
@@ -24,9 +24,9 @@
 
   <?php  foreach ($posts as $post) { ?>
 
-    <div class="col-xs-6 col-md-4 col-lg-3 ">
+    <div class="col-xs-6 col-md-4 col-lg-3 " id="notice<?php echo $post['post_notice']->notice_Id; ?>" >
     
-    <div class="notice container" id="notice<?php echo $post['post_notice']->notice_Id; ?>"  >
+    <div class="notice container">
       <?php
         $faculty = $post['post_notice']->faculty_Id;
 
@@ -68,7 +68,7 @@
         </div>
 
         <div class="notice-view-button-wrapper">
-        <button type="button" class="btn btn-info">View More </button>
+        <a href="<?php echo base_url()?>student/dashboard/list?Search=<?php echo $post['post_notice']->title; ?>" class="btn btn-info" role="button">View More</a>
         </div>
 
 

@@ -56,7 +56,7 @@
                
                     <?php }?>
                    <li>
-                        <a href="#" data-toggle="collapse" data-target="#submenu-3"><i class="fa fa-fw fa-paper-plane-o"></i> MANAGE ADMINS <i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                        <a href="#" data-toggle="collapse" data-target="#submenu-3"><i class="fa fa-fw fa-user-plus"></i> MANAGE ADMINS <i class="fa fa-fw fa-angle-down pull-right"></i></a>
                         <ul id="submenu-3" class="collapse">
 
                             <li ><a href="<?php echo base_url('admin/registration')?>" ><i class="fa fa-angle-double-right "></i> New Admin </a></li>
