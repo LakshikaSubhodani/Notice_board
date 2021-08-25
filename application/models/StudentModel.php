@@ -24,7 +24,7 @@ class StudentModel extends CI_Model{
         $student_id = $this->db->insert_id();
 
         // set log
-        $this->set_log("Register new Student. Id - ". $user_id);
+        //$this->set_log("Register new Student. Id - ". $user_id);
 
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE)

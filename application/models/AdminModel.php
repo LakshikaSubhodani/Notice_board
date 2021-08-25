@@ -289,7 +289,7 @@ class AdminModel extends CI_Model{
          ## Search 
          $searchQuery = "";
          if($searchValue != ''){
-             $searchQuery = " (enrollment_Id like '%".$searchValue."%' or user_firstname like '%".$searchValue."%' or user_email like'%".$searchValue."%' ) ";
+             $searchQuery = " (user_Id like '%".$searchValue."%' or enrollment_Id like '%".$searchValue."%' or user_firstname like '%".$searchValue."%' or user_email like'%".$searchValue."%' ) ";
          }
 
          ## Total number of records without filtering
@@ -374,7 +374,7 @@ class AdminModel extends CI_Model{
           ## Search 
           $searchQuery = "";
           if($searchValue != ''){
-              $searchQuery = " (faculty like '%".$searchValue."%' or user_firstname like '%".$searchValue."%' or user_email like'%".$searchValue."%' ) ";
+              $searchQuery = " (user_Id like '%".$searchValue."%' or faculty like '%".$searchValue."%' or user_firstname like '%".$searchValue."%' or user_email like'%".$searchValue."%' ) ";
           }
 
            ## Total number of records without filtering

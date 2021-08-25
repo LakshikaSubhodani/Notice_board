@@ -46,7 +46,7 @@
                     <div id="reg_faculty" class="reg_info">
                         <label for="faculty" class="reg_label">Faculty :</label>
                         <select name="faculty_id" id="f_aculty" class="select" >
-                            <option value="5" >Faculty of Animal Science and Export Agricultu</option>
+                            <option value="5" >Faculty of Animal Science and Export Agriculture</option>
                             <option value="3" >Faculty of Applied Sciences</option>
                             <option value="4" >Faculty of Management</option>
                             <option value="6" >Faculty of Technological Studies</option>
